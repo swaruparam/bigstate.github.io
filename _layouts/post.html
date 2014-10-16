@@ -3,8 +3,8 @@ layout: default
 ---
 
 
-{{ title }}:
-{{ post.content | strip_html | truncatewords: 50 }}
+{{ post.title }}::
+{{ post.excerpt | strip_html | truncatewords: 50 }}
 <hr>
 
-{{ content }}
+{{ post.content }}
