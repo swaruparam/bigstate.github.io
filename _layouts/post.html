@@ -4,13 +4,11 @@ layout: default
 
 
 <p> 
- 
- <em> 
-    by {{ page.author }}  on {{ page.date | date_to_string}}
-  </em>
-   <br>
-
-   {{page.excerpt}}
+   <em> 
+     {{page.excerpt}}
+       <br>
+       by {{ page.author }}  on {{ page.date | date_to_string}}
+   </em>
 </p>
 <hr>
 
