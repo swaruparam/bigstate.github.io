@@ -77,10 +77,12 @@ For help on the Git-flavored Markdown used at this site, see:
 
 Easy!
 
-+ Goto _/\_layouts_ and create a new _X.html_ file.
++ Goto _/\_layouts_ and create a new _XX.html_ file.
 + Change your yaml header in your posts to say
 
-    layout: X
+As follows:
+
+    layout: XX
 
 Note that, in the usual case, you probably do _not_ want  to write your own layout since that
 make complicate the standard look and feel of the site.  But its good to know you can do it if
