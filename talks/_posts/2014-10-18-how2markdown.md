@@ -16,6 +16,7 @@ New posts to B.I.G. have to go into some _\_posts_ site
     people/_posts    # insert your details here
     projects/_posts  # for project notes
     talks/_posts     # for lightning talks, briefings
+    tools/_posts     # for coding samples, coding tricks
 
 Each post has to be named with the data and topic. E.g. this post is
 
@@ -79,7 +80,7 @@ Easy!
 + Goto _/\_layouts_ and create a new _X.html_ file.
 + Change your yaml header in your posts to say
 
-     layout: X
+    layout: X
 
 Note that, in the usual case, you probably do _not_ want  to write your own layout since that
 make complicate the standard look and feel of the site.  But its good to know you can do it if
@@ -87,13 +88,18 @@ you want (e.g. for some complex slide presentation).
 
 Actually, writing a layout can be a little involved:
 
-+ Let me show you....
-
++ [Here, let me show you...](https://github.com/bigstate/bigstate.github.io)
 
 ## Your Next Steps
 
-1. Add a little pic of yourself into _/img/ (say, 100 pixles square);
-2. Add in a little post about yourself in _/people/\_posts_;
-3. Be a good community member:
-       + Find something cool about data mining and add it to  _/news/\_posts_;
-			 + Propose a lightning talk and write it into _/talks/\_posts_.
+Help yourself!
+
++ Add a little pic of yourself into _/img/ (say, 100 pixles square);
++ Add in a little post about yourself in _/people/\_posts_;
+
+Help the B.I.G. community:
+
++ If you do something cool in our technical sessions, write some very quick notes
+  around the script and through it up onto _/tools/\_posts_;
++ Find something cool about data mining and add it to  _/news/\_posts_;
++ Propose a lightning talk and write it into _/talks/\_posts_.
