@@ -47,12 +47,20 @@ Note some gotchas:
 + each line can have only one "_:_"
 + Header must start and end with three dashes
 
+### Images
+
 Images should be stored in the _/img_ directory of the BigState site. Once they are there,
 you can include them as in the following example:
 
 
      ![sometag]({{site.url}}/img/someFile.png)
 
+Note some gotchas:
+
++ Forgetting to add in the reference to _site.url_
++ Making the image too wide (with our current style, "too wide" is more than 550 pixels)
++ Making the image too big. Dude! Web site! Keep image size under 100K each unless you have 
+  a really, really good reason to do otherwise.
 
 ### File Types
 
@@ -61,6 +69,31 @@ Posts can be X.markdown or X.md or X.html files. Note that markdown can contain 
 
 For help on the Git-flavored Markdown used at this site, see:
 
-+ https://help.github.com/articles/markdown-basics/
-+ https://help.github.com/articles/github-flavored-markdown/
++ [Markdown Basics](https://help.github.com/articles/markdown-basics/)
++ [Github Markdown Extensions](https://help.github.com/articles/github-flavored-markdown/)
 
+## How to Modify Layouts
+
+Easy!
+
++ Goto _/\_layouts_ and create a new _X.html_ file.
++ Change your yaml header in your posts to say
+
+     layout: X
+
+Note that, in the usual case, you probably do _not_ want  to write your own layout since that
+make complicate the standard look and feel of the site.  But its good to know you can do it if
+you want (e.g. for some complex slide presentation).
+
+Actually, writing a layout can be a little involved:
+
++ Let me show you....
+
+
+## Your Next Steps
+
+1. Add a little pic of yourself into _/img/ (say, 100 pixles square);
+2. Add in a little post about yourself in _/people/\_posts_;
+3. Be a good community member:
+       + Find something cool about data mining and add it to  _/news/\_posts_;
+			 + Propose a lightning talk and write it into _/talks/\_posts_.
