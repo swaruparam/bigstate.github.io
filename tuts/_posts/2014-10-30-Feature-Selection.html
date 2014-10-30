@@ -1,0 +1,484 @@
+---
+author: Tim Menzies
+title: Feature Subset Selection (FSS)
+excerpt: Sometimes, the best thing you do is throw away daat.
+layout: flame
+---
+
+
+
+
+
+<ul>
+<li>Occam's Razor - The English philosopher, William of Occam (1300-1349) propounded Occam's Razor:
+<ul>
+<li>Entia non sunt multiplicanda praeter necessitatem.</li>
+<li>(Latin for "Entities should not be multiplied more than necessary"). That is, the fewer assumptions an explanation of a phenomenon depends on, the better it is.</li>
+</ul></li>
+<li>(BTW, Occam's razor did not survive into the 21st century. 
+<ul>
+<li>The data mining community
+modified it to the <em>Minimum Description Length</em> (MDL)  principle.</li>
+<li>MDL: the best theory is
+the smallest BOTH is size AND number of errors).</li>
+</ul></li>
+</ul>
+
+<p>The case for FSS</p>
+
+
+<p>Repeated result: throwing out features rarely damages a theory</li>
+
+
+<p><center>
+<a href="http://iccle.googlecode.com/svn/trunk/share/img/fsses.gif"><img
+ width=600 border=0 src="http://iccle.googlecode.com/svn/trunk/share/img/fsses.gif"></a></center>
+</p>
+
+<p>And, sometimes, feature removal is very useful:
+<ul>
+<li>E.g. linear regression on 
+<a href="http://iccle.googlecode.com/svn/trunk/share/data/arff/bn.arff">bn.arff</a> yielded:
+
+<pre>Defects =     
+    82.2602 * S1=L,M,VH +
+    158.6082 * S1=M,VH +
+    249.407  * S1=VH +
+     41.0281 * S2=L,H +
+     68.9153 * S2=H +
+    151.9207 * S3=M,H +
+    125.4786 * S3=H +
+    257.8698 * S4=H,M,VL +
+    108.1679 * S4=VL +
+    134.9064 * S5=L,M +
+   -385.7142 * S6=H,M,VH +
+    115.5933 * S6=VH +
+   -178.9595 * S7=H,L,M,VL +
+   ...
+   [ 50 lines deleted ]
+</pre>
+<li>On a 10-way cross-validation, this correlates 0.45 from predicted to actuals.
+<li>10 times, take 90% of the date and run a <em>WRAPPER</em>- a best first search through combinations of
+attributes. At each step, linear regression was called to
+asses a particular combination of attributes. In those ten experiments, WRAPPER found that adding
+ feature X to features A,B,C,... improved correlation the following number of times:
+<pre>
+number of folds (%)  attribute
+           2( 20 %)     1 S1
+           0(  0 %)     2 S2
+           2( 20 %)     3 S3
+           1( 10 %)     4 S4
+           0(  0 %)     5 S5
+           1( 10 %)     6 S6
+           6( 60 %)     7 S7     <==
+           1( 10 %)     8 F1
+           1( 10 %)     9 F2
+           2( 20 %)    10 F3
+           2( 20 %)    11 D1
+           0(  0 %)    12 D2
+           5( 50 %)    13 D3     <==
+           0(  0 %)    14 D4
+           0(  0 %)    15 T1
+           1( 10 %)    16 T2
+           1( 10 %)    17 T3
+           1( 10 %)    18 T4
+           0(  0 %)    19 P1
+           1( 10 %)    20 P2
+           0(  0 %)    21 P3
+           1( 10 %)    22 P4
+           6( 60 %)    23 P5     <==
+           1( 10 %)    24 P6
+           2( 20 %)    25 P7
+           1( 10 %)    26 P8
+           0(  0 %)    27 P9
+           2( 20 %)    28 Hours
+           8( 80 %)    29 KLoC   <==
+           4( 40 %)    30 Language
+           3( 30 %)    32 log(hours)
+</pre>
+<li>Four variables appeared in the majority of
+folds. A second run did a 10-way using just those
+variables to yield a smaller model with (much)
+larger correlation (98\%):
+<pre>
+Defects =
+    876.3379 * S7=VL +
+   -292.9474 * D3=L,M +
+    483.6206 * P5=M +
+      5.5113 * KLoC +
+     95.4278
+</pre>
+</ul>
+<h2>Excess attributes</h2>
+
+<ul>
+<li>Confuse decision tree learners
+<ul>
+<li>Too much early splitting of data</li>
+<li>Less data available for each sub-tree</li>
+</ul></li>
+<li>Too many things correlated to class?
+<ul>
+<li>Dump some of them!</li>
+</ul></li>
+</ul>
+
+<h2>Why FSS?</h2>
+
+<ul>
+<li>throw away noisy attributes</li>
+<li>throw away redundant attributes</li>
+<li>smaller model= better accuracies (often)</li>
+<li>smaller model= simpler explanation</li>
+<li>smaller model= less variance</li>
+<li>smaller model= any downstream processing will thank you</li>
+</ul>
+
+<h2>Problem</h2>
+
+<ul>
+<li>Exploring all subsets exponential</li>
+<li>Need heuristic methods to cull search; 
+<ul>
+<li>e.g. forward/back select</li>
+</ul></li>
+<li><p>Forward select:</p>
+
+<ul>
+<li>start with empty set</li>
+<li>grow via hill climbing:</li>
+<li>repeat
+<ul>
+<li>try adding one thing and if that improves things</li>
+<li>try again using the remaining attributes</li>
+</ul></li>
+<li>until no improvement after N additions 
+    OR nothing to add</li>
+</ul></li>
+<li><p>Back select</p>
+
+<ul>
+<li>as above but start with all attributes 
+and discard, don't add</li>
+</ul></li>
+<li><p>Usually, we throw away most attributes:</p>
+
+<ul>
+<li>so forward select often better</li>
+<li>exception: J48 exploits interactions more than,say, NB.</li>
+<li>so, possibly, back select is better when wrapping j48</li>
+<li>so, possibly, forward select is as good as it gets for NB</li>
+</ul></li>
+</ul>
+
+
+<h2>FSS types:</h2>
+
+<p><center><img width=250 src="http://iccle.googlecode.com/svn/trunk/share/img/filter-img.jpg">
+&nbsp;
+&nbsp;
+&nbsp;
+<img width=200 src="http://iccle.googlecode.com/svn/trunk/share/img/wrapper-img.jpg"></center></p>
+
+<ul>
+<li><p>filters vs wrappers:</p>
+
+<ul>
+<li>wrappers: use an actual target learners
+e.g. WRAPPER</li>
+<li>filters: study aspects of the data
+e.g. the rest</li>
+<li>filters are faster!</li>
+<li>wrappers exploit bias of target learner so often
+perform better, when they terminate
+<ul>
+<li>don't terminate on large data sets</li>
+</ul></li>
+</ul></li>
+<li><p>solo vs combinations:</p>
+
+<ul>
+<li>evaluate solo attributes: 
+e.g. INFO GAIN, RELIEF</li>
+<li>evaluate combinations:
+e.g. PCA, SVD, CFS, CBS, WRAPPER</li>
+<li>solos can be faster than combinations</li>
+</ul></li>
+<li><p>supervised vs unsupervised:</p>
+
+<ul>
+<li>use/ignores class values
+e.g. PCA/SVD is unsupervised, reset supervised </li>
+</ul></li>
+<li><p>numeric vs discrete search methods</p>
+
+<ul>
+<li><p>ranker: for schemes that numerically score
+      attributes
+e.g. RELIEF, INFO GAIN, </p></li>
+<li><p>best first: for schemes that do heuristic search
+e.g. CBS, CFS, WRAPPER</p></li>
+</ul></li>
+</ul>
+
+<h2>Hall and Holmes:</h2>
+
+<p>This paper: pre-discretize numerics using entropy.</p>
+
+<p><a href="http://menzies.us/iccle/?refs#hall03">Hall &amp; Holmes</a>.  
+</p>
+
+<h2>INFO GAIN</h2>
+
+<ul>
+<li>often useful in high-dimensional problems
+<ul>
+<li>real simple to calculate</li>
+</ul></li>
+<li>attributes scored based on info gain: H(C) - H(C|A)</li>
+<li>Sort of like doing decision tree learning, just to one level.
+</ul>
+
+<h2>RELIEF</h2>
+
+<ul>
+<li><a href="http://menzies.us/iccle/?refs#Kononenko97">Kononenko97</a>
+
+<li>useful attributes differentiate 
+    between instances from other class</li>
+<li>randomly pick some instances (here, 250)</li>
+<li>find something similar, in an another class</li>
+<li>compute distance this one to the other one
+<li>Stochastic sampler: scales to large data sets.
+<li>Binary RELIEF (two class system) for "n" instances for weights on features "F"
+<pre>
+set all weights W[f]=0
+for i = 1 to n; do
+   randomly select instance R with class C
+   find nearest hit H      // closest thing of same class
+   find nearest miss M     // closest thing of difference class
+   for f = 1 to #features; do
+       W[f] = W[f] - diff(f,R,H)/n + diff(f,R,M)/n
+   done
+done
+</pre>
+<li>diff:
+<ul>
+<li>
+discrete differences: 
+         0 if same 1 if not.</li>
+<li>continuous: differences
+         absolute differences</li>
+<li>normalized to 0:1</li>
+
+
+<li>When values are missing, see
+<a href="http://menzies.us/iccle/?refs#Kononenko97">Kononenko97</a>, p4.
+</ul>
+<li>N-class RELIEF: not 1 near hit/miss, but k nearest misses for each class C
+<pre>
+W[f]= W[f] - &sum;<sub>i=1..k</sub> diff(f,R, H<sub>i</sub>) / (n*k) 
+           + &sum;<sub>C &ne class(R)</sub> &sum;<sub>i=1..k</sub> ( 
+                                P(C) / ( 1 - P(class(R)))
+                                * diff(f,R, M<sub>i</sub>(C)) / (n*k)
+                               )
+</pre>
+The  <em>P(C) / (1 - P(class(R))</em> expression is a normalization function
+that
+<ul>
+<li> demotes the effect of R from rare classes 
+<li>and rewards
+the effect of near hits from common classes.
+</ul>
+</ul>
+
+<h2>CBS (consistency-based evaluation)</h2>
+
+<ul>
+<li>Seek combinations of attributes that divide data
+containing a strong single class majority.
+<ul>
+<li>Kind of like info gain, but emphasis of single winner</li>
+</ul></li>
+<li>Discrete attributes</li>
+<li>Forward select to find subsets of attributes</li>
+</ul>
+
+<h2>WRAPPER</h2>
+
+<ul>
+<li>Forward select attributes
+<ul>
+<li>score each combination using a 5-way cross val</li>
+</ul></li>
+<li>When wrapping, best to try different target learners
+<ul>
+<li>Check that we aren't over exploiting the learner's bias</li>
+<li>e.g. J48 and NB</li>
+</ul></li>
+</ul>
+
+<p><center>
+<img width=500 src="http://iccle.googlecode.com/svn/trunk/share/img/wrapper1-img.jpg"></center></p>
+
+<h2>PRINCIPAL COMPONENTS ANALYSIS (PCA)</h2>
+
+<p>(The traditional way to do  FSS.)</p>
+
+<ul>
+<li>Only unsupervised method studied here</li>
+<li>Transform dimensions</li>
+<li>Find covariance matrix C[i,j] is the correlation i to j; 
+<ul>
+<li>C[i,i]=1; </li>
+<li>C[i,j]=C[j,i]</li>
+</ul></li>
+<li>Find eigenvectors</li>
+<li>Transform the original space to the eigenvectors</li>
+<li>Rank them by the variance in their predictions</li>
+<li>Report the top ranked vectors</li>
+</ul>
+
+<p><center><img width=200 src="http://iccle.googlecode.com/svn/trunk/share/img/pca-img.jpg"></center></p>
+
+<ul>
+<li><p>Makes things easier, right? Well...</p>
+
+<pre><code>if   domain1  &lt;= 0.180 
+then NoDefects 
+else if domain1 &gt; 0.180 
+     then if domain1 &lt;= 0.371 then NoDefects 
+     else if domain1 &gt; 0.371 then Defects 
+
+
+domain1 = 0.241 * loc     + 0.236 * v(g) 
+        + 0.222 * ev(g)   + 0.236 * iv(g)     + 0.241 *  n 
+        + 0.238 * v       - 0.086 * l         + 0.199  * d 
+        + 0.216 * i       + 0.225 * e + 0.236 * b + 0.221  * t 
+        + 0.241 * lOCode  + 0.179 * lOComment 
+        + 0.221 * lOBlank + 0.158 * lOCodeAndComment 
+        + 0.163 * uniqO p + 0.234 * uniqOpnd 
+        + 0.241 * totalOp + 0.241 * totalOpnd 
+        + 0.236 * branchCount
+</code></pre></li>
+</ul>
+
+<h3>PCA vs LDA (linear discrminant analysis)</h3>
+
+<p>LDA = PCA + class knowledge</p>
+
+<p>(Note: LDA should not be confused with
+ <a href="http://portal.acm.org/citation.cfm?id=944937&dl=GUIDE,">LDA 
+(latent Dirichlet allocation)</a> which currently all the rage in text mining. And
+that LDA is not covered in this subject.)
+
+
+<p><center><img width=400 src="http://iccle.googlecode.com/svn/trunk/share/img/lda-img.jpg"></center></p>
+
+<h3>Latent Semantic Indexing</h3>
+
+<ul>
+<li><p>Performing PCA is the equivalent of performing <em>Singular 
+Value Decomposition</em> (SVD) on the data. </p></li>
+<li><p>Any n * m matrix X (of terms n in documents m) can be rewritten as: </p>
+
+<ul>
+<li>X = To * So * Do'</li>
+<li>So is a diagonal matrix scoring attributes, top to bottom, most interesting to least interesting</li>
+<li>We can shrink X by dumping the duller (lower) rows of So</li>
+</ul></li>
+</ul>
+
+<p><center><img width=500 src="http://iccle.googlecode.com/svn/trunk/share/img/sdi-img.jpg"></center></p>
+
+<ul>
+<li>Latent Semantic Indexing is a method for selecting 
+informative subspaces of feature spaces. </li>
+<li>It was developed for information retrieval to reveal semantic 
+information from document co-occurrences. </li>
+<li>Terms that did not appear in a document may still associate 
+with a document. </li>
+<li><p>LSI derives uncorrelated index factors that might be 
+considered artificial concepts.</p></li>
+<li><p>SVD easy to perform in Matlab </p>
+
+<ul>
+<li>Also, there is some <a href="http://menzies.us/iccle/?svd">C-code</a>.</li>
+<li>Also <a href="http://math.nist.gov/javanumerics/jama/">Java Classes available</a>
+<ul>
+<li>class SingularValueDecomposition 
+<ul>
+<li>Constructor: SingularValueDecomposition(Matrix Arg) </li>
+<li>Methods: GetS(); GetU(); GetV();     (U,V correspond to T,D) </li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Be careful about using these tools blindly 
+<ul>
+<li>It is no harm to understand what is going on! </li>
+</ul></li>
+<li><p>The <a href="http://www.imm.dtu.dk/pubdb/views/edoc_download.php/3274/pdf/imm3274.pdf">Matrix Cookbook</a></p></li>
+<li><p>Note: major win for SVD/LSI: scales very well.</p>
+
+<ul>
+<li>Research possibility: text mining for software engineering
+<ul>
+<li>typically very small corpuses</li>
+<li>so might we find better FSS for text mining than SVD/LSI</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h2>CFS (correlation-based feature selection)</h2>
+
+<ul>
+<li>Scores high subsets with strong correlation to class 
+ and weak correlation to each other.</li>
+<li>Numerator: how predictive</li>
+<li>Denominator: how redundant</li>
+<li>FIRST ranks correlation of solo attributes</li>
+<li>THEN heuristic search to explore subsets</li>
+</ul>
+
+<h2>And the winner is:</h2>
+
+<ul>
+<li>Wrapper! and it that is too slow...</li>
+<li>CFS, Relief are best all round performers
+<ul>
+<li>CFS selects fewer features</li>
+</ul></li>
+<li>Phew. Hall invented CFS</li>
+</ul>
+
+<h2>Other Methods</h2>
+<p>Other methods not explored by Hall and Holmes...
+
+<ul>
+<li>Note: the text mining literature has yet to make such an assessment. Usually, SVD rules.
+But see <a href="http://www.rcost.unisannio.it/mdipenta/papers/icsm2002class.pdf">An Approach to Classify Software Maintenance Requests</a>, from ICSM 2002,
+for a nice comparison of nearest neighbor, CART, Bayes classifiers, and some other information retrieval methods).</p>
+<li>
+<a name="rf"><p>Using random forests for feature selection of the mth variable:
+<ul>
+<li> randomly permute 
+all values of the mth variable in the oob data
+<li>
+Put these altered oob  x-values down the tree 
+and get classifications. 
+<li>
+Proceed as though computing a new internal 
+error rate (i.e. run the classifier). 
+<li>
+The amount by which this new error exceeds the 
+original test set error is defined as the importance 
+of the mth variable.
+</ul>
+<li>Use the Nomogram scores
+
+<p><center>
+<a href="http://iccle.googlecode.com/svn/trunk/share/img/nomofss.png"><img
+ width=600 border=0 src="http://iccle.googlecode.com/svn/trunk/share/img/nomofss.png"></a></center>
+</p>
+
+</ul>
