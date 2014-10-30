@@ -1,0 +1,90 @@
+---
+layout: flame
+author: Tim Menzies
+title: Neural Networks
+excerpt: A biologically-inspired algorithm
+---
+
+<em>Note that these are some very old notes. For the state of the art, go Google "deep learning"</em>
+
+<p>Biologically inspired by human neurons:</p>
+
+<ul>
+<li>lots of small units</li>
+
+<li>theory spread out amongst the weights between the units</li>
+<li>use feedback to learn</li>
+</ul>
+
+<p>As "neural nets" developed, their biological status grew more and more tenuous</p>
+
+<ul>
+<li>Might be better to call them non-linear curve fitting</li>
+</ul>
+
+<p><center> <img width=400 src="http://iccle.googlecode.com/svn/trunk/share/img/nn.png">
+</center></p>
+
+<h3>Locally guided descent to reduce error</h3>
+
+<p><center> <img width=400 src="http://iccle.googlecode.com/svn/trunk/share/img/nnerr.png"> </center></p>
+
+<p>Increase alpha</p>
+
+<ul>
+<li>learn faster</li>
+<li>hard to terminate on the global minima</li>
+</ul>
+
+<p>Increase momentum</p>
+
+<ul>
+<li>avoid local minima</li>
+<li>just shoot on past the global minima</li>
+</ul>
+
+<h3>Inside a neuron</h3>
+
+<p><center> <img width=400 src="http://iccle.googlecode.com/svn/trunk/share/img/neuron.png"> </center></p>
+
+<p>effort = size * w1 + complexity * w2 + vocabulary * w3 </p>
+
+<p>Output is a sigmoid function </p>
+
+<ul>
+<li>output only generated if inputs go over some weight threshold.</li>
+</ul>
+
+<h3>Layers of neurons</h3>
+
+<ul>
+<li>inputs=layer[0]</li>
+
+<li>outputs=layer[N]</li>
+<li>hidden layers = rest</li>
+</ul>
+
+<p>Sub-symbolic</p>
+
+<ul>
+<li>no central representing of domain concepts</li>
+<li>no "grandmother"  cell</li>
+<li>like Naive Bayes classifiers; hard to explain</li>
+</ul>
+
+<h3>Using</h3>
+
+<p>Training=  find the weights</p>
+
+<ul>
+<li>back-propagation</li>
+<li>Given incorrect output, work backwards to jiggle the weights</li>
+<li>training can be slow</li>
+</ul>
+
+<p>Testing= freeze the weights and apply</p>
+
+<ul>
+<li>fast runtimes</li>
+</ul>
+
