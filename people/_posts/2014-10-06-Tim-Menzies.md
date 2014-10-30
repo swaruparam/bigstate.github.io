@@ -1,5 +1,6 @@
 ---
 layout: post
+author: Tim Menzies
 title: Tim Menzies
 excerpt: Old white guy. Ph.D. (UNSW), Professor , NC State
 ---
