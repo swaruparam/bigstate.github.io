@@ -14,6 +14,12 @@ INPROCEEDINGS{Gupta04genic:a,
 }
 ```
 
+## Exercise for Reader
+
+Discovered... late at night... bug... this code throws away all but one cluster
+at each generation...function of this data... bug?
+
+
 ## Install
 
 Requires gawk 3 or higher.
@@ -43,7 +49,8 @@ You should see some output that looks like:
 4,110,76,20,100,28.4,0.118,27,tested_negative
 ```
 
-Which is to same, Genic went hunting for (say) 20 clusters and found nine
+Which is to same, Genic went hunting through 700+ records to find (say) 20 clusters,
+but found only nine
 interesting ones.
 
 ## Tour of the code

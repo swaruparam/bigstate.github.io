@@ -1,6 +1,6 @@
 BEGIN {
     FS=","; # columns sperated by ","
-    K= 10 # initial number of centers
+    K= 20 # initial number of centers
     M= 20 # number of initial points
     N=100 # size of one generation
     C=0   # cluster id
@@ -22,6 +22,9 @@ length(W) < K { more() }
 END           { printC() }
 
 function printC(   c,i,str,sep) {
+    print ""
+    print "records: ",NF
+    print "centrods: ",length(W)
     for(c in W) {
 	str=sep=""
         for(i=1;i<=NF;i++) {
@@ -32,7 +35,9 @@ function printC(   c,i,str,sep) {
     }
 }
 function more( i) {
+   
     while(length(W) < K) {
+	printf("+")
 	C++
 	W[C]=1
     	for(i=1;i<=NR;i++) Centroid[C,i]=$i
@@ -40,13 +45,19 @@ function more( i) {
     }
 }
 function less(   sum,c,doomed) {
+   
 	for(c in W) sum += W[c]
-	for(c in W) if (W[c]/sum < rand()) doomed[c]
+  	for(c in W) {
+	    #print W[c],sum,W[c]/sum
+            if (W[c]/sum < rand()) doomed[c]
+        }
 	for(c in doomed) {
-		delete W[c]
-		for(i=1;i<=NR;i++) delete Centroid[c,i]
-	}	
-	for(c in W) W[c] = 1
+	    printf("-")
+	    delete W[c]
+	    for(i=1;i<=NR;i++) delete Centroid[c,i]
+	}
+	print ""
+	#for(c in W) W[c] = 1
 }
 function move(c) {
 	for(i=1;i<=NF;i++) {
@@ -72,13 +83,14 @@ function nearest(   min,c,tmp,out) {
 			out = c }
 	return c
 }
-function dist(c,    y,n, i,out) {
+function dist(c,    y,n, i,out,d) {
 	for(i in Indep) {
 		n++
 		y = Centroid[c,i]
-		out+=(i in Num) ? distNum(norm(i,$i),y)^2 : distSep($i,y)^2 
+		out+=((i in Num) ? distNum(norm(i,$i),y)^2 : distSep($i,y)^2)
 	}
-	return sqrt(out)/sqrt(n+0.0000001)
+	d=sqrt(out)/sqrt(n+0.0000001)
+	return d
 }	
 function distSym(x,y) {
 	if (x == Missing) return 1
