@@ -1,14 +1,16 @@
-BEGIN {FS=","; 
-	K= 10 # initial number of centers
-	M= 20 # number of initial points
-	N=100 # size of one generation
-	C=0   # cluster id
-	Missing="?"
-	split("",W,"")
+BEGIN {
+    FS=","; # columns sperated by ","
+    K= 10 # initial number of centers
+    M= 20 # number of initial points
+    N=100 # size of one generation
+    C=0   # cluster id
+    Missing="?"
+    split("",W,"")
 }
-             {  gsub(/[ \t]/,""); gsub(/\#.*/,"") }
+             {  gsub(/[ \t]/,"");  #kill white space
+                gsub(/\#.*/,"")    #kill comments
+             } 
 NR==1        {  srand(Seed ? Seed : 1)
-                print Seed
                 for(I=1;I<=NF;I++) 
                     readHeader(I,$I)
 		 next }
