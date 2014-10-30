@@ -1,0 +1,226 @@
+	# gawk profile, created Wed Oct 29 23:08:55 2014
+
+	# BEGIN block(s)
+
+	BEGIN {
+     1  	FS = ","
+     1  	K = 10
+     1  	M = 20
+     1  	N = 100
+     1  	C = 0
+     1  	Missing = "?"
+     1  	split("", W, "")
+	}
+
+	# Rule(s)
+
+   769  {
+   769  	gsub(/[ \t]/, "", $0)
+   769  	gsub(/\#.*/, "", $0)
+	}
+
+   769  NR == 1 { # 1
+     1  	srand((Seed ? Seed : 1))
+     1  	print Seed
+     9  	for (I = 1; I <= NF; I++) {
+     9  		readHeader(I, $I)
+		}
+     1  	next
+	}
+
+   768  /^$/ {
+		next
+	}
+
+   768  {
+  6144  	for (I in Num) {
+  6144  		minMax(I, $I)
+		}
+	}
+
+   768  length(W) < K { # 73
+    73  	more()
+	}
+
+   695  {
+   695  	move(nearest())
+	}
+
+   695  NR % N == 0 { # 7
+     7  	less()
+	}
+
+	# END block(s)
+
+	END {
+     1  	printC()
+	}
+
+
+	# Functions, listed alphabetically
+
+  6950  function dist(c, y, n, i, out)
+	{
+ 55600  	for (i in Indep) {
+ 55600  		n++
+ 55600  		y = Centroid[c, i]
+ 55600  		out += (i in Num ? distNum(norm(i, $i), y) ^ 2 : distSep($i, y) ^ 2)
+		}
+  6950  	return (sqrt(out) / sqrt(n + 1e-07))
+	}
+
+ 55600  function distNum(x, y)
+	{
+ 55600  	if (x == Missing && y == Missing) {
+			return 1
+		}
+ 55600  	if (x == Missing) {
+			return ((y < 0.5 ? 1 - y : y))
+		}
+ 55600  	if (y == Missing) {
+			return ((x < 0.5 ? 1 - x : x))
+		}
+ 55600  	return (x - y)
+	}
+
+	function distSym(x, y)
+	{
+		if (x == Missing) {
+			return 1
+		}
+		if (y == Missing) {
+			return 1
+		}
+		return ((x == y ? 0 : 1))
+	}
+
+     7  function less(sum, c, doomed)
+	{
+    70  	for (c in W) {
+    70  		sum += W[c]
+		}
+    70  	for (c in W) {
+    70  		if (W[c] / sum < rand()) { # 63
+    63  			doomed[c]
+			}
+		}
+    63  	for (c in doomed) {
+    63  		delete W[c]
+ 25200  		for (i = 1; i <= NR; i++) {
+ 25200  			delete Centroid[c, i]
+			}
+		}
+     7  	for (c in W) {
+     7  		W[c] = 1
+		}
+	}
+
+  6144  function minMax(pos, val)
+	{
+  6144  	if (pos in Min) { # 6056
+  6056  		if (val < Min[pos]) { # 2831
+  2831  			Min[pos] = val
+  3225  		} else {
+  3225  			Min[pos] = val
+			}
+		}
+  6144  	if (pos in Max) { # 6056
+  6056  		if (val > Max[pos]) { # 2806
+  2806  			Max[pos] = val
+  3250  		} else {
+  3250  			Max[pos] = val
+			}
+		}
+	}
+
+    73  function more(i)
+	{
+    73  	while (length(W) < K) {
+    73  		C++
+    73  		W[C] = 1
+ 25580  		for (i = 1; i <= NR; i++) {
+ 25580  			Centroid[C, i] = $i
+			}
+    73  		next
+		}
+	}
+
+   695  function move(c)
+	{
+  6255  	for (i = 1; i <= NF; i++) {
+  6255  		if (Centroid[c, i] == Missing) {
+				Centroid[c, i] == $i
+  6255  		} else {
+  6255  			if ($i != Missing) { # 6255
+  6255  				Centroid[c, i] = (i in Num ? moveNum(c, i, $i) : moveSym(c, i, $i))
+				}
+			}
+		}
+   695  	W[c]++
+	}
+
+  5560  function moveNum(c, pos, val)
+	{
+  5560  	return ((Centroid[c, pos] * W[c] + val) / (W[c] + 1))
+	}
+
+   695  function moveSym(c, pos, val)
+	{
+   695  	if (rand() < 1 / W[c]) { # 41
+    41  		Centroid[c, pos] = val
+		}
+	}
+
+   695  function nearest(min, c, tmp, out)
+	{
+   695  	min = 1000
+  6950  	for (c in W) {
+  6950  		if ((tmp = dist(c)) < min) { # 2380
+  2380  			min = tmp
+  2380  			out = c
+			}
+		}
+   695  	return c
+	}
+
+ 55600  function norm(pos, val)
+	{
+ 55600  	return ((val - Min[pos]) / (Max[pos] - Min[pos] + 1e-05))
+	}
+
+	function o(a, str, i, com)
+	{
+		com = "sort -k 2 #" rand()
+		for (i in a) {
+			print(str " [" i "]= " a[i]) | com
+		}
+		close(com)
+	}
+
+     1  function printC(c, i, str, sep)
+	{
+    10  	for (c in W) {
+    10  		str = sep = ""
+    90  		for (i = 1; i <= NF; i++) {
+    90  			str = str sep Centroid[c, i]
+    90  			sep = ","
+			}
+    10  		print str
+		}
+	}
+
+     9  function readHeader(pos, val)
+	{
+     9  	if (gsub(/\$/, "", val)) { # 8
+     8  		Num[pos]
+     1  	} else {
+     1  		Sym[pos]
+		}
+     9  	if (gsub(/\!/, "", val)) { # 1
+     1  		Dep[pos]
+     8  	} else {
+     8  		Indep[pos]
+		}
+     9  	Name[pos] = val
+     9  	Index[val] = pos
+	}

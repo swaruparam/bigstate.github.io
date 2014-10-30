@@ -13,7 +13,8 @@ Neural nets are very cool:
 * Famous for learning concepts even when the target
   concept is not known before the learning starts;
 + Before our CPUs got very fast, neural nets were famous for slow training times, but very fast run times. Much loved by the process control
-  community since, to run a network, you only need a matrix of notes and matrix of weights between nodes.
+  community since, to run a network, you only need a matrix of notes and matrix of weights between
+  nodes.
 
 [Basic Neural Network Tutorial](https://takinginitiative.wordpress.com/2008/04/03/basic-neural-network-tutorial-theory/)
 
