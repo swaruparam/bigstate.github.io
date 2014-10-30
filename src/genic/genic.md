@@ -116,7 +116,7 @@ function minMax(pos,val) {
 The list _W_ has one index per centroid. If we have less than the
 desired _K_ centroids, grab the next line and make it a centroid.
 
-```
+```awk
 length(W) < K { more() }
 
 function more( i) {
@@ -207,7 +207,7 @@ rows, then we throw it away. Note that if we end up with less than
 _K_ centroids, the above _New Centroids_ code will wake up and grab
 the newt few rows for new centroids.
 
-```
+```awk
 (NR % N) == 0 { less() }
 
 function less(   sum,c,doomed) {
@@ -239,7 +239,7 @@ function printC(   c,i,str,sep) {
 
 ### Misc debug routine: Prints arrays
 
-```
+```awk
 function o(a,str,     i,com) {
     com = "sort -k 2 #" rand()
     for(i in a) print str " [" i "]= "a[i] | com
