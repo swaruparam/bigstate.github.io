@@ -2,7 +2,7 @@
 layout: post
 title: Anant Agarwal
 author: Anant Agarwal
-excerpt: I love working with different technologies and almost always keep myself busy with some MOOC. 
+excerpt: I love working with different technologies and almost always keep myself busy with some MOOC 
 ---
 
 
