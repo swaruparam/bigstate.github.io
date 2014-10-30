@@ -2,6 +2,7 @@
 layout: post
 title: Yatish Mehta
 author: Yatish Mehta
+excerpt: I love to discuss product incubation and startup ideas.
 ---
 
 ![Yatish Mehta]({{site.url}}/img/yjmehta.jpg)

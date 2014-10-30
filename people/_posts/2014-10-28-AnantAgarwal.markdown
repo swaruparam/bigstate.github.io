@@ -2,7 +2,9 @@
 layout: post
 title: Anant Agarwal
 author: Anant Agarwal
+exceprt: I love working with different technologies and almost always keep myself busy with some MOOC. 
 ---
+
 
 ![Anant Agarwal]({{site.url}}/img/anantagarwal.jpg)
 
