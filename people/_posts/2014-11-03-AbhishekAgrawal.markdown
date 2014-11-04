@@ -3,7 +3,7 @@
 layout: post
 title: Abhishek Agrawal
 author: Abhishek Agrawal
-excerpt: On the learning track...
+excerpt: 'On the learning track...'
 ---
 
 ![Abhishek Agrawal]({{site.url}}/img/abhishek.jpg)
