@@ -24,7 +24,7 @@ Each post has to be named with the data and topic. E.g. this post is
 
 To add files, either checkout the repo or add in from the on-line Git interface:
 
-![edit]({{site.url}}/img/newNews.png)
+![edit](/img/newNews.png)
 
 ### Inside a Post
 
@@ -54,7 +54,7 @@ Images should be stored in the _/img_ directory of the BigState site. Once they 
 you can include them as in the following example:
 
 
-     ![sometag]({{site.url}}/img/someFile.png)
+     ![sometag](/img/someFile.png)
 
 Note some gotchas:
 

@@ -6,7 +6,7 @@ excerpt: I love working with different technologies and almost always keep mysel
 ---
 
 
-![Anant Agarwal]({{site.url}}/img/anantagarwal.jpg)
+![Anant Agarwal](/img/anantagarwal.jpg)
 
 
 Hi, I am Anant Agarwal, a graduate student in the Dept. of Computer Science here at NC State. My area of interest are Distributed Systems, Machine Learning and Data Science. I am fluent in C++ and Python. I love working with different technologies and almost always keep myself busy with some MOOC. 
