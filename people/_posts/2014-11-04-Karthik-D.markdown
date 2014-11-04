@@ -1,0 +1,17 @@
+---
+layout: post
+author: Karthik Dhanasekaran
+title: Karthik Dhanasekaran
+excerpt: CS Grad Student, Class of 2016
+---
+
+ 
+![Karthik Dhanasekaran]({{site.url}}/img/kd.jpg)
+
+Hey all, I am Karthik, a CS graduate student at NC State and I will be graduating in 2016. I am into Data Mining, Machine Learning and Software Development. Having just finished my undergrad at the College of Engineering Guindy, Chennai in India, I am floored by the so many new things I am exposed to, at NC State.
+
+I love to develop and make new stuff. I have participated in a few hackathons so far, having made a few apps and learnt so many new technologies at the end of them. I am comfortable in C and C++ and am currently learning R and Python.
+
+I am an eager learner and one day, hope to become a useful member of the Computer Science fraternity and give back to the world, from which I have taken so much from.
+
+You can email me at kdhanas@ncsu.edu and reach me using my twitter handle [@karthik_y2k](https://twitter.com/karthik_y2k) You could also check out my github at [@foreverkd](http://github.com/foreverkd)
