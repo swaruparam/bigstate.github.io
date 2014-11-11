@@ -1,0 +1,15 @@
+---
+layout: post
+author:Shanjana Vakeeswaran
+title: Shanjana Vakeeswaran
+excerpt: Operations Research Graduate Student, Class of 2016
+---
+
+ 
+![Shanjana Vakeeswaran]({{site.url}}/img/svakees.jpg)
+
+Hello World!
+    This is Shanjana Vakeeswaran pursuing my Masters in Operations Research here at NC State.Having completed a statistics and optimization intensive Bachelors degree in Industrial Engineering in College of Engineering Guindy,Chennai, I intend to specialise in Data Analytics,Machine Learning and Modelling and strengthen my base in Computer Science during the course of my Masters.I am comfortable with C,C++,Matlab and SPSS  and currently learning R and Python.
+
+
+You can email me at svakees@ncsu.edu, follow me in twitter at [@chaituchawla](https://twitter.com/chaituchawla).Do check my github at [@svakeeswaran](https://github.com/svakeeswaran)
